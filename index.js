@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2015-2017 magiclen.org
+ * Copyright 2015-2018 magiclen.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
  *
  */
 
-var crypto = require('crypto');
-var hash = require('mhash');
-var crc = require('node-crc');
+const crypto = require('crypto');
+const hash = require('mhash');
+const crc = require('node-crc');
 
-function MagicCrypt(key = '', bit = 128, iv = '') {
-  var mKey, mBit, mIV;
+const MagicCrypt = function (key = '', bit = 128, iv = '') {
+  let mKey, mBit, mIV;
   switch (bit) {
     case 64:
       mKey = crc.crc64(Buffer.from(key, 'utf8'));
@@ -39,11 +39,11 @@ function MagicCrypt(key = '', bit = 128, iv = '') {
           key = hash('md5', key);
           break;
         case 192:
-          var temp = hash('tiger192', key);
+          let temp = hash('tiger192', key);
           // Convert to tiger192,3
-          var key = '';
-          for (var i = 0; i < 3; ++i) {
-            for (var j = 7; j >= 0; --j) {
+          key = '';
+          for (let i = 0; i < 3; ++i) {
+            for (let j = 7; j >= 0; --j) {
               key += temp.substr((i * 16) + (j * 2), 2);
             }
           }
@@ -65,36 +65,35 @@ function MagicCrypt(key = '', bit = 128, iv = '') {
   }
   mBit = bit;
 
-  this.encrypt = function(str) {
-    var algorithm = (mBit > 64) ? 'aes-' + mBit + '-cbc' : 'des-cbc';
-    var cipher = crypto.createCipheriv(algorithm, mKey, mIV);
-    var crypted = cipher.update(str, 'utf8', 'base64');
-    crypted += cipher.final('base64');
-    return crypted;
-  };
+  this.algorithm = (mBit > 64) ? 'aes-' + mBit + '-cbc' : 'des-cbc';
+  this.key = mKey;
+  this.iv = mIV;
+};
 
-  this.encryptData = function(dataBuffer) {
-    var algorithm = (mBit > 64) ? 'aes-' + mBit + '-cbc' : 'des-cbc';
-    var cipher = crypto.createCipheriv(algorithm, mKey, mIV);
-    var crypted = Buffer.concat([cipher.update(dataBuffer), cipher.final()]);
-    return crypted.toString('base64');
-  };
+MagicCrypt.prototype.encrypt = function (str) {
+  let cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
+  let crypted = cipher.update(str, 'utf8', 'base64');
+  crypted += cipher.final('base64');
+  return crypted;
+};
 
-  this.decrypt = function(str) {
-    var algorithm = (mBit > 64) ? 'aes-' + mBit + '-cbc' : 'des-cbc';
-    var cipher = crypto.createDecipheriv(algorithm, mKey, mIV);
-    var decrypted = cipher.update(str, 'base64', 'utf-8');
-    decrypted += cipher.final('utf-8');
-    return decrypted;
-  };
+MagicCrypt.prototype.encryptData = function (dataBuffer) {
+  let cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
+  let crypted = Buffer.concat([cipher.update(dataBuffer), cipher.final()]);
+  return crypted.toString('base64');
+};
 
-  this.decryptData = function(dataBase64) {
-    var buffer = new Buffer(dataBase64, 'base64');
-    var algorithm = (mBit > 64) ? 'aes-' + mBit + '-cbc' : 'des-cbc';
-    var cipher = crypto.createDecipheriv(algorithm, mKey, mIV);
-    var decrypted = Buffer.concat([cipher.update(buffer), cipher.final()]);
-    return decrypted;
-  };
+MagicCrypt.prototype.decrypt = function (str) {
+  let cipher = crypto.createDecipheriv(this.algorithm, this.key, this.iv);
+  let decrypted = cipher.update(str, 'base64', 'utf-8');
+  decrypted += cipher.final('utf-8');
+  return decrypted;
+};
+
+MagicCrypt.prototype.decryptData = function (dataBase64) {
+  let cipher = crypto.createDecipheriv(this.algorithm, this.key, this.iv);
+  let decrypted = Buffer.concat([cipher.update(dataBase64, 'base64'), cipher.final()]);
+  return decrypted;
 };
 
 
