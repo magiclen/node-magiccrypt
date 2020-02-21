@@ -24,11 +24,11 @@ const MagicCrypt = function (key = '', bit = 128, iv = '') {
   let mKey, mBit, mIV;
   switch (bit) {
     case 64:
-      mKey = crc.crc64(Buffer.from(key, 'utf8'));
+      mKey = crc.crc64we(Buffer.from(key, 'utf8'));
       if (iv !== '') {
-        mIV = crc.crc64(Buffer.from(iv, 'utf8'));
+        mIV = crc.crc64we(Buffer.from(iv, 'utf8'));
       } else {
-        mIV = new Buffer([0, 0, 0, 0, 0, 0, 0, 0]); //IV is not set. It doesn't recommend.
+        mIV = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0]); //IV is not set. It doesn't recommend.
       }
       break;
     case 128:
@@ -52,12 +52,12 @@ const MagicCrypt = function (key = '', bit = 128, iv = '') {
           key = hash('sha256', key);
           break;
       }
-      mKey = new Buffer(key, 'hex');
+      mKey = Buffer.from(key, 'hex');
       if (iv !== '') {
         iv = hash('MD5', iv);
-        mIV = new Buffer(iv, 'hex');
+        mIV = Buffer.from(iv, 'hex');
       } else {
-        mIV = new Buffer([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //IV is not set. It doesn't recommend.
+        mIV = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //IV is not set. It doesn't recommend.
       }
       break;
     default:
