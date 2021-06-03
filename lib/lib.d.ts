@@ -1,7 +1,6 @@
 /// <reference types="node" />
 declare type Bit = 64 | 128 | 192 | 256;
 export default class MagicCrypt {
-    private bit;
     private key;
     private iv;
     private algorithm;

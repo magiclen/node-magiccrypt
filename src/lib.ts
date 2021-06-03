@@ -12,9 +12,8 @@ export default class MagicCrypt {
 
     private algorithm: string;
 
-    constructor(key = "", private bit: Bit = 128, iv = "") {
+    constructor(key = "", bit: Bit = 128, iv = "") {
         let mKey;
-        let mBit;
         let mIV;
 
         switch (bit) {
@@ -65,36 +64,36 @@ export default class MagicCrypt {
             throw new Error("The key must be 8 bytes(64 bits), 16 bytes(128 bits), 24 bytes(192 bits) or 32 bytes(256 bits)!");
         }
 
-        mBit = bit;
+        const mBit = bit;
 
         this.algorithm = (mBit > 64) ? "aes-" + mBit + "-cbc" : "des-cbc";
         this.key = mKey as Buffer;
         this.iv = mIV as Buffer;
     }
 
-    encrypt(str: string) {
+    encrypt(str: string): string {
         const cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
         let crypted = cipher.update(str, "utf8", "base64");
         crypted += cipher.final("base64");
         return crypted;
     }
 
-    encryptData(dataBuffer: Buffer) {
+    encryptData(dataBuffer: Buffer): string {
         const cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
-        let crypted = Buffer.concat([cipher.update(dataBuffer), cipher.final()]);
+        const crypted = Buffer.concat([cipher.update(dataBuffer), cipher.final()]);
         return crypted.toString("base64");
     }
 
-    decrypt(str: string) {
+    decrypt(str: string): string {
         const cipher = crypto.createDecipheriv(this.algorithm, this.key, this.iv);
         let decrypted = cipher.update(str, "base64", "utf-8");
         decrypted += cipher.final("utf-8");
         return decrypted;
     }
 
-    decryptData(dataBase64: string) {
+    decryptData(dataBase64: string): Buffer {
         const cipher = crypto.createDecipheriv(this.algorithm, this.key, this.iv);
-        let decrypted = Buffer.concat([cipher.update(dataBase64, "base64"), cipher.final()]);
+        const decrypted = Buffer.concat([cipher.update(dataBase64, "base64"), cipher.final()]);
         return decrypted;
     }
 }
