@@ -3,6 +3,8 @@ MagicCrypt
 
 [![CI](https://github.com/magiclen/node-magiccrypt/actions/workflows/ci.yml/badge.svg)](https://github.com/magiclen/node-magiccrypt/actions/workflows/ci.yml)
 
+You need to set up the Rust development environment: [rustup](https://rustup.rs/)
+
 ## For Node.js
 
 ### Encrypt

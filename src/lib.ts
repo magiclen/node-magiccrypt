@@ -1,7 +1,6 @@
 import crypto from "crypto";
-import crc from "node-crc";
 
-const hash = require("mhash");
+const m = require("../index.node");
 
 type Bit = 64|128|192|256;
 
@@ -18,9 +17,9 @@ export default class MagicCrypt {
 
         switch (bit) {
         case 64:
-            mKey = crc.crc64we(Buffer.from(key, "utf8"));
+            mKey = m.crc64we(key);
             if (iv !== "") {
-                mIV = crc.crc64we(Buffer.from(iv, "utf8"));
+                mIV = m.crc64we(iv);
             } else {
                 mIV = Buffer.from([
                     0, 0, 0, 0, 0, 0, 0, 0,
@@ -32,27 +31,20 @@ export default class MagicCrypt {
         case 256:
             switch (bit) {
             case 128:
-                key = hash("md5", key);
+                key = m.md5(key);
                 break;
             case 192: {
-                const temp = hash("tiger192", key);
-                // Convert to tiger192,3
-                key = "";
-                for (let i = 0;i < 3;i++) {
-                    for (let j = 7;j >= 0;j--) {
-                        key += temp.substr((i * 16) + (j * 2), 2);
-                    }
-                }
+                key = m.tiger192(key);
                 break;
             }
             case 256:
-                key = hash("sha256", key);
+                key = m.sha256(key);
                 break;
             }
 
             mKey = Buffer.from(key, "hex");
             if (iv !== "") {
-                iv = hash("MD5", iv);
+                iv = m.md5(iv);
                 mIV = Buffer.from(iv, "hex");
             } else {
                 mIV = Buffer.from([
