@@ -16,44 +16,44 @@ export default class MagicCrypt {
         let mIV;
 
         switch (bit) {
-        case 64:
-            mKey = m.crc64we(key);
-            if (iv !== "") {
-                mIV = m.crc64we(iv);
-            } else {
-                mIV = Buffer.from([
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                ]);
-            }
-            break;
-        case 128:
-        case 192:
-        case 256:
-            switch (bit) {
+            case 64:
+                mKey = m.crc64we(key);
+                if (iv !== "") {
+                    mIV = m.crc64we(iv);
+                } else {
+                    mIV = Buffer.from([
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                    ]);
+                }
+                break;
             case 128:
-                key = m.md5(key);
-                break;
-            case 192: {
-                key = m.tiger192(key);
-                break;
-            }
+            case 192:
             case 256:
-                key = m.sha256(key);
-                break;
-            }
+                switch (bit) {
+                    case 128:
+                        key = m.md5(key);
+                        break;
+                    case 192: {
+                        key = m.tiger192(key);
+                        break;
+                    }
+                    case 256:
+                        key = m.sha256(key);
+                        break;
+                }
 
-            mKey = Buffer.from(key, "hex");
-            if (iv !== "") {
-                iv = m.md5(iv);
-                mIV = Buffer.from(iv, "hex");
-            } else {
-                mIV = Buffer.from([
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                ]);
-            }
-            break;
-        default:
-            throw new Error("The key must be 8 bytes(64 bits), 16 bytes(128 bits), 24 bytes(192 bits) or 32 bytes(256 bits)!");
+                mKey = Buffer.from(key, "hex");
+                if (iv !== "") {
+                    iv = m.md5(iv);
+                    mIV = Buffer.from(iv, "hex");
+                } else {
+                    mIV = Buffer.from([
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    ]);
+                }
+                break;
+            default:
+                throw new Error("The key must be 8 bytes(64 bits), 16 bytes(128 bits), 24 bytes(192 bits) or 32 bytes(256 bits)!");
         }
 
         const mBit = bit;
