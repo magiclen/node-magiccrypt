@@ -1,6 +1,6 @@
 {
   "name": "magiccrypt",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "MagicCrypt is a Java/PHP/NodeJS/Rust library to encrypt/decrpyt strings, files, or data, using Data Encryption Standard(DES) or Advanced Encryption Standard(AES) algorithms. It supports CBC block cipher mode, PKCS5 padding and 64, 128, 192 or 256-bits key length. If the encrypted data is a string, it will be formatted automatically to Base64.",
   "main": "lib/lib.js",
   "types": "lib/lib.d.ts",
@@ -33,17 +33,17 @@
   },
   "homepage": "https://github.com/magiclen/node-magiccrypt#readme",
   "dependencies": {
-    "@types/node": "^15.6.1",
+    "@types/node": "^16.4.3",
     "cargo-cp-artifact": "^0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.18",
-    "@types/mocha": "^8.2.2",
+    "@types/mocha": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "chai": "^4.3.4",
     "eslint": "^7.27.0",
-    "mocha": "^8.4.0",
+    "mocha": "^9.0.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
   }

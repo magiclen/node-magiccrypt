@@ -1,6 +1,6 @@
 [package]
 name = "magiccrypt"
-version = "3.0.0"
+version = "3.0.1"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/node-qr-code"
@@ -26,6 +26,6 @@ tiger = "0.1"
 sha2 = "0.9"
 
 [dependencies.neon]
-version = "0.8"
+version = "0.9"
 default-features = false
 features = ["napi-6"]
