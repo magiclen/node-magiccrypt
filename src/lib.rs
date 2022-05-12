@@ -6,6 +6,7 @@ use sha2::Sha256;
 use tiger::Tiger;
 
 use neon::prelude::*;
+use neon::types::buffer::TypedArray;
 
 fn crc64we(mut cx: FunctionContext) -> JsResult<JsBuffer> {
     let value = cx.argument::<JsString>(0)?.value(&mut cx);
@@ -15,7 +16,11 @@ fn crc64we(mut cx: FunctionContext) -> JsResult<JsBuffer> {
 
     let crc = crc.get_crc();
 
-    let buffer = JsBuffer::external(&mut cx, crc.to_be_bytes());
+    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 8)? };
+
+    let slice = buffer.as_mut_slice(&mut cx);
+
+    slice.copy_from_slice(&crc.to_be_bytes());
 
     Ok(buffer)
 }
@@ -28,7 +33,11 @@ fn md5(mut cx: FunctionContext) -> JsResult<JsBuffer> {
 
     let md5 = md5.finalize();
 
-    let buffer = JsBuffer::external(&mut cx, md5);
+    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 16)? };
+
+    let slice = buffer.as_mut_slice(&mut cx);
+
+    slice.copy_from_slice(&md5);
 
     Ok(buffer)
 }
@@ -41,7 +50,11 @@ fn tiger192(mut cx: FunctionContext) -> JsResult<JsBuffer> {
 
     let tiger = tiger.finalize();
 
-    let buffer = JsBuffer::external(&mut cx, tiger);
+    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 24)? };
+
+    let slice = buffer.as_mut_slice(&mut cx);
+
+    slice.copy_from_slice(&tiger);
 
     Ok(buffer)
 }
@@ -54,7 +67,11 @@ fn sha256(mut cx: FunctionContext) -> JsResult<JsBuffer> {
 
     let sha256 = sha256.finalize();
 
-    let buffer = JsBuffer::external(&mut cx, sha256);
+    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 32)? };
+
+    let slice = buffer.as_mut_slice(&mut cx);
+
+    slice.copy_from_slice(&sha256);
 
     Ok(buffer)
 }
