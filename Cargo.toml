@@ -2,9 +2,9 @@
 name = "magiccrypt"
 version = "3.0.1"
 authors = ["Magic Len <len@magiclen.org>"]
-edition = "2018"
-repository = "https://github.com/magiclen/node-qr-code"
-homepage = "https://magiclen.org/node-qrcode/"
+edition = "2021"
+repository = "https://github.com/magiclen/node-magiccrypt"
+homepage = "https://magiclen.org/aes/"
 keywords = ["node.js", "aes", "des", "encrypt", "decrypt"]
 categories = []
 description = "MagicCrypt is a Java/PHP/NodeJS/Rust library to encrypt/decrpyt strings, files, or data, using Data Encryption Standard(DES) or Advanced Encryption Standard(AES) algorithms. It supports CBC block cipher mode, PKCS5 padding and 64, 128, 192 or 256-bits key length. If the encrypted data is a string, it will be formatted automatically to Base64."
@@ -20,12 +20,12 @@ codegen-units = 1
 
 [dependencies]
 crc-any = "2.3.11"
-digest = "0.9"
-md-5 = "0.9"
-tiger = "0.1"
-sha2 = "0.9"
+digest = "0.10"
+md-5 = "0.10"
+tiger = "0.2"
+sha2 = "0.10"
 
 [dependencies.neon]
-version = "0.9"
+version = "0.10"
 default-features = false
 features = ["napi-6"]
