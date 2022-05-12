@@ -1,5 +1,6 @@
 import crypto from "crypto";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const m = require("../index.node");
 
 type Bit = 64|128|192|256;
