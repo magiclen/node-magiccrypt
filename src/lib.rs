@@ -1,87 +1,55 @@
-use digest::Digest;
-
 use crc_any::CRCu64;
+use digest::Digest;
 use md5::Md5;
+use napi::{bindgen_prelude::*, JsBuffer};
+use napi_derive::napi;
 use sha2::Sha256;
 use tiger::Tiger;
 
-use neon::prelude::*;
-use neon::types::buffer::TypedArray;
-
-fn crc64we(mut cx: FunctionContext) -> JsResult<JsBuffer> {
-    let value = cx.argument::<JsString>(0)?.value(&mut cx);
-
+#[napi]
+pub fn crc64we(env: Env, s: String) -> Result<JsBuffer> {
     let mut crc = CRCu64::crc64we();
-    crc.digest(&value);
+    crc.digest(s.as_str());
 
     let crc = crc.get_crc();
 
-    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 8)? };
+    let buffer = env.create_buffer_with_data(crc.to_be_bytes().to_vec())?;
 
-    let slice = buffer.as_mut_slice(&mut cx);
-
-    slice.copy_from_slice(&crc.to_be_bytes());
-
-    Ok(buffer)
+    Ok(buffer.into_raw())
 }
 
-fn md5(mut cx: FunctionContext) -> JsResult<JsBuffer> {
-    let value = cx.argument::<JsString>(0)?.value(&mut cx);
-
+#[napi]
+pub fn md5(env: Env, s: String) -> Result<JsBuffer> {
     let mut md5 = Md5::default();
-    md5.update(&value);
+    md5.update(s.as_str());
 
     let md5 = md5.finalize();
 
-    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 16)? };
+    let buffer = env.create_buffer_with_data(md5.to_vec())?;
 
-    let slice = buffer.as_mut_slice(&mut cx);
-
-    slice.copy_from_slice(&md5);
-
-    Ok(buffer)
+    Ok(buffer.into_raw())
 }
 
-fn tiger192(mut cx: FunctionContext) -> JsResult<JsBuffer> {
-    let value = cx.argument::<JsString>(0)?.value(&mut cx);
-
+#[napi]
+pub fn tiger192(env: Env, s: String) -> Result<JsBuffer> {
     let mut tiger = Tiger::default();
-    tiger.update(&value);
+    tiger.update(s.as_str());
 
     let tiger = tiger.finalize();
 
-    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 24)? };
+    let buffer = env.create_buffer_with_data(tiger.to_vec())?;
 
-    let slice = buffer.as_mut_slice(&mut cx);
-
-    slice.copy_from_slice(&tiger);
-
-    Ok(buffer)
+    Ok(buffer.into_raw())
 }
 
-fn sha256(mut cx: FunctionContext) -> JsResult<JsBuffer> {
-    let value = cx.argument::<JsString>(0)?.value(&mut cx);
-
+#[napi]
+pub fn sha256(env: Env, s: String) -> Result<JsBuffer> {
     let mut sha256 = Sha256::default();
-    sha256.update(&value);
+    sha256.update(s.as_str());
 
     let sha256 = sha256.finalize();
 
-    let mut buffer = unsafe { JsBuffer::uninitialized(&mut cx, 32)? };
+    let buffer = env.create_buffer_with_data(sha256.to_vec())?;
 
-    let slice = buffer.as_mut_slice(&mut cx);
-
-    slice.copy_from_slice(&sha256);
-
-    Ok(buffer)
-}
-
-#[neon::main]
-fn main(mut cx: ModuleContext) -> NeonResult<()> {
-    cx.export_function("crc64we", crc64we)?;
-    cx.export_function("md5", md5)?;
-    cx.export_function("tiger192", tiger192)?;
-    cx.export_function("sha256", sha256)?;
-
-    Ok(())
+    Ok(buffer.into_raw())
 }

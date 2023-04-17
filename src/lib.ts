@@ -1,11 +1,15 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const m = require("../index.node");
+import {
+    crc64We,
+    md5,
+    tiger192,
+    sha256,
+} from "../index.cjs";
 
-type Bit = 64|128|192|256;
+export type Bit = 64|128|192|256;
 
-export default class MagicCrypt {
+export class MagicCrypt {
     private key: Buffer;
 
     private iv: Buffer;
@@ -13,14 +17,14 @@ export default class MagicCrypt {
     private algorithm: string;
 
     constructor(key = "", bit: Bit = 128, iv = "") {
-        let mKey;
-        let mIV;
+        let mKey: Buffer;
+        let mIV: Buffer;
 
         switch (bit) {
             case 64:
-                mKey = m.crc64we(key);
+                mKey = crc64We(key);
                 if (iv !== "") {
-                    mIV = m.crc64we(iv);
+                    mIV = crc64We(iv);
                 } else {
                     mIV = Buffer.from([
                         0, 0, 0, 0, 0, 0, 0, 0,
@@ -32,21 +36,19 @@ export default class MagicCrypt {
             case 256:
                 switch (bit) {
                     case 128:
-                        key = m.md5(key);
+                        mKey = md5(key);
                         break;
                     case 192: {
-                        key = m.tiger192(key);
+                        mKey = tiger192(key);
                         break;
                     }
                     case 256:
-                        key = m.sha256(key);
+                        mKey = sha256(key);
                         break;
                 }
 
-                mKey = Buffer.from(key, "hex");
                 if (iv !== "") {
-                    iv = m.md5(iv);
-                    mIV = Buffer.from(iv, "hex");
+                    mIV = md5(iv);
                 } else {
                     mIV = Buffer.from([
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -59,9 +61,9 @@ export default class MagicCrypt {
 
         const mBit = bit;
 
-        this.algorithm = (mBit > 64) ? "aes-" + mBit + "-cbc" : "des-cbc";
-        this.key = mKey as Buffer;
-        this.iv = mIV as Buffer;
+        this.algorithm = mBit > 64 ? `aes-${mBit}-cbc` : "des-cbc";
+        this.key = mKey;
+        this.iv = mIV;
     }
 
     encrypt(str: string): string {
@@ -90,5 +92,3 @@ export default class MagicCrypt {
         return decrypted;
     }
 }
-
-module.exports = MagicCrypt;

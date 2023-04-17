@@ -13,7 +13,9 @@ You need to set up the Rust development environment: [rustup](https://rustup.rs/
 
 You can use **encrypt** method to encrypt any string. For example,
 
-```javascript
+```typescript
+import { MagicCrypt } from "magiccrypt";
+
 const mc = new MagicCrypt("magickey", 256);
 console.log(mc.encrypt("http://magiclen.org"));
 ```
@@ -24,7 +26,9 @@ The result is,
 
 To encrypt any data buffer to a base64 string,
 
-```javascript
+```typescript
+import { MagicCrypt } from "magiccrypt";
+
 const mc = new MagicCrypt("magickey", 256);
 console.log(mc.encryptData(buffer));
 ```
@@ -33,7 +37,9 @@ console.log(mc.encryptData(buffer));
 
 You can use **decrypt** method to decrypt any encrypted string. For example,
 
-```javascript
+```typescript
+import { MagicCrypt } from "magiccrypt";
+
 const mc = new MagicCrypt("magickey", 256);
 console.log(mc.decrypt("DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ="));
 ```
@@ -44,7 +50,9 @@ The result is,
 
 To decrypt any base64 string to data buffer,
 
-```javascript
+```typescript
+import { MagicCrypt } from "magiccrypt";
+
 const mc = new MagicCrypt("magickey", 256);
 const buffer = mc.decryptData(base64);
 ```

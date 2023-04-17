@@ -1,6 +1,6 @@
 /// <reference types="node" />
-declare type Bit = 64 | 128 | 192 | 256;
-export default class MagicCrypt {
+export type Bit = 64 | 128 | 192 | 256;
+export declare class MagicCrypt {
     private key;
     private iv;
     private algorithm;
@@ -10,4 +10,3 @@ export default class MagicCrypt {
     decrypt(str: string): string;
     decryptData(dataBase64: string): Buffer;
 }
-export {};
