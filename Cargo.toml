@@ -23,7 +23,7 @@ codegen-units = 1
 napi = "2"
 napi-derive = "2"
 
-crc-any = "2.3.11"
+crc-any = "2"
 digest = "0.10"
 md-5 = "0.10"
 tiger = "0.2"
