@@ -1,4 +1,4 @@
-import { MagicCrypt } from "../src/lib";
+import { MagicCrypt } from "../src/lib.js";
 
 const getNodeMajorVersion = (): number => {
     const version = process.version;

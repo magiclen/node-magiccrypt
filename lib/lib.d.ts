@@ -1,4 +1,4 @@
-/// <reference types="node" />
+/// <reference types="node" resolution-mode="require"/>
 export type Bit = 64 | 128 | 192 | 256;
 export declare class MagicCrypt {
     private key;
