@@ -3,8 +3,8 @@ import crypto from "node:crypto";
 import {
     crc64We,
     md5,
-    tiger192,
     sha256,
+    tiger192,
 } from "../index.cjs";
 
 export type Bit = 64|128|192|256;

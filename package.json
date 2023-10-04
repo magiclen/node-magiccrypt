@@ -1,62 +1,64 @@
 {
-  "name": "magiccrypt",
-  "version": "4.0.2",
-  "description": "MagicCrypt is a Java/PHP/NodeJS/Rust library to encrypt/decrpyt strings, files, or data, using Data Encryption Standard(DES) or Advanced Encryption Standard(AES) algorithms. It supports CBC block cipher mode, PKCS5 padding and 64, 128, 192 or 256-bits key length. If the encrypted data is a string, it will be formatted automatically to Base64.",
-  "type": "module",
-  "exports": "./lib/lib.js",
-  "types": "./lib/lib.d.ts",
-  "engines": {
-    "node": ">=16"
-  },
-  "files": [
-    "lib",
-    "src",
-    "build.rs",
-    "Cargo.toml"
-  ],
-  "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:coverage": "node --experimental-vm-modules  node_modules/jest/bin/jest.js --coverage",
-    "test:inspect-brk": "node --experimental-vm-modules --inspect-brk=0.0.0.0:9230 node_modules/jest/bin/jest.js --testTimeout 0 --runInBand",
-    "clean": "rimraf lib",
-    "install": "napi build --release --platform --js index.cjs --dts index.d.cts",
-    "build": "npm run clean && npm run install && tsc -p tsconfig.build.json",
-    "build:watch": "npm run build -- -w",
-    "lint": "eslint src tests",
-    "lint:fix": "npm run lint -- --fix",
-    "prepare": "git config core.hooksPath .githooks || exit 0",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run lint && npm run test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/magiclen/node-magiccrypt.git"
-  },
-  "keywords": [
-    "node.js",
-    "aes",
-    "des",
-    "encrypt",
-    "decrypt"
-  ],
-  "author": "Magic Len",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/magiclen/node-magiccrypt/issues"
-  },
-  "homepage": "https://magiclen.org/aes/",
-  "devDependencies": {
-    "@types/jest": "^29.5.4",
-    "@typescript-eslint/eslint-plugin": "^6.6.0",
-    "@typescript-eslint/parser": "^6.6.0",
-    "eslint": "^8.49.0",
-    "jest": "^29.6.4",
-    "rimraf": "^5.0.1",
-    "ts-jest": "^29.1.1",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "@napi-rs/cli": "^2.16.3",
-    "@types/node": "^20.6.0"
-  }
+    "name": "magiccrypt",
+    "version": "4.0.3",
+    "description": "MagicCrypt is a Java/PHP/NodeJS/Rust library to encrypt/decrpyt strings, files, or data, using Data Encryption Standard(DES) or Advanced Encryption Standard(AES) algorithms. It supports CBC block cipher mode, PKCS5 padding and 64, 128, 192 or 256-bits key length. If the encrypted data is a string, it will be formatted automatically to Base64.",
+    "type": "module",
+    "exports": "./lib/lib.js",
+    "types": "./lib/lib.d.ts",
+    "engines": {
+        "node": ">=16"
+    },
+    "files": [
+        "lib",
+        "src",
+        "build.rs",
+        "Cargo.toml"
+    ],
+    "scripts": {
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "test:coverage": "node --experimental-vm-modules  node_modules/jest/bin/jest.js --coverage",
+        "test:inspect-brk": "node --experimental-vm-modules --inspect-brk=0.0.0.0:9230 node_modules/jest/bin/jest.js --testTimeout 0 --runInBand",
+        "clean": "rimraf lib",
+        "install": "napi build --release --platform --js index.cjs --dts index.d.cts",
+        "build": "npm run clean && npm run install && tsc -p tsconfig.build.json",
+        "build:watch": "npm run build -- -w",
+        "lint": "eslint src tests",
+        "lint:fix": "npm run lint -- --fix",
+        "prepare": "git config core.hooksPath .githooks || exit 0",
+        "prepack": "npm run build",
+        "prepublishOnly": "npm run lint && npm run test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/magiclen/node-magiccrypt.git"
+    },
+    "keywords": [
+        "node.js",
+        "aes",
+        "des",
+        "encrypt",
+        "decrypt"
+    ],
+    "author": "Magic Len",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/magiclen/node-magiccrypt/issues"
+    },
+    "homepage": "https://magiclen.org/aes/",
+    "devDependencies": {
+        "@types/jest": "^29.5.5",
+        "@typescript-eslint/eslint-plugin": "^6.7.4",
+        "@typescript-eslint/parser": "^6.7.4",
+        "eslint": "^8.50.0",
+        "eslint-import-resolver-typescript": "^3.6.1",
+        "eslint-plugin-import": "^2.28.1",
+        "jest": "^29.7.0",
+        "rimraf": "^5.0.5",
+        "ts-jest": "^29.1.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@napi-rs/cli": "^2.16.3",
+        "@types/node": "^20.8.2"
+    }
 }
