@@ -8,22 +8,22 @@ const getNodeMajorVersion = (): number => {
 
 const NODE_VERSION = getNodeMajorVersion();
 
-describe("Encrypt", function () {
-    it("should encrypt a string by AES-256", function () {
+describe("Encrypt", () => {
+    it("should encrypt a string by AES-256", () => {
         const mc = new MagicCrypt("magickey", 256);
         const result = mc.encrypt("http://magiclen.org");
         
         expect(result).toBe("DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=");
     });
 
-    it("should encrypt a string by AES-192", function () {
+    it("should encrypt a string by AES-192", () => {
         const mc = new MagicCrypt("magickey", 192);
         const result = mc.encrypt("http://magiclen.org");
 
         expect(result).toBe("p0X9IHMqaxA78T0X8Y9DnNeEmVXIgUxrXmeyUEO1Muo=");
     });
 
-    it("should encrypt a string by AES-128", function () {
+    it("should encrypt a string by AES-128", () => {
         const mc = new MagicCrypt("magickey", 128);
         const result = mc.encrypt("http://magiclen.org");
 
@@ -31,7 +31,7 @@ describe("Encrypt", function () {
     });
 
     if (NODE_VERSION <= 16) {
-        it("should encrypt a string by DES-64", function () {
+        it("should encrypt a string by DES-64", () => {
             const mc = new MagicCrypt("magickey", 64);
             const result = mc.encrypt("http://magiclen.org");
         
@@ -39,7 +39,7 @@ describe("Encrypt", function () {
         });
     }
 
-    it("should encrypt a buffer by AES-256", function () {
+    it("should encrypt a buffer by AES-256", () => {
         const mc = new MagicCrypt("magickey", 256);
         const result = mc.encryptData(Buffer.from("http://magiclen.org", "utf8"));
 
@@ -47,22 +47,22 @@ describe("Encrypt", function () {
     });
 });
 
-describe("Decrypt", function () {
-    it("should decrypt a string by AES-256", function () {
+describe("Decrypt", () => {
+    it("should decrypt a string by AES-256", () => {
         const mc = new MagicCrypt("magickey", 256);
         const result = mc.decrypt("DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=");
 
         expect(result).toBe("http://magiclen.org");
     });
 
-    it("should decrypt a string by AES-192", function () {
+    it("should decrypt a string by AES-192", () => {
         const mc = new MagicCrypt("magickey", 192);
         const result = mc.decrypt("p0X9IHMqaxA78T0X8Y9DnNeEmVXIgUxrXmeyUEO1Muo=");
 
         expect(result).toBe("http://magiclen.org");
     });
 
-    it("should decrypt a string by AES-128", function () {
+    it("should decrypt a string by AES-128", () => {
         const mc = new MagicCrypt("magickey", 128);
         const result = mc.decrypt("Pdpj9HqTAN7vY7Z9msMzlIXJcNQ5N+cIJsiQhLqyjVI=");
 
@@ -70,7 +70,7 @@ describe("Decrypt", function () {
     });
 
     if (NODE_VERSION <= 16) {
-        it("should decrypt a string by DES-64", function () {
+        it("should decrypt a string by DES-64", () => {
             const mc = new MagicCrypt("magickey", 64);
             const result = mc.decrypt("nqIQCAbQ0TKs6x6eGRdwrouES803NhvC");
 
@@ -78,7 +78,7 @@ describe("Decrypt", function () {
         });
     }
 
-    it("should decrypt a buffer by AES-256", function () {
+    it("should decrypt a buffer by AES-256", () => {
         const mc = new MagicCrypt("magickey", 256);
         const result = mc.decryptData("DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=");
 

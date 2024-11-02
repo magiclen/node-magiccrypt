@@ -7,7 +7,7 @@ import {
     tiger192,
 } from "../index.cjs";
 
-export type Bit = 64|128|192|256;
+export type Bit = 64 | 128 | 192 | 256;
 
 export class MagicCrypt {
     private key: Buffer;
