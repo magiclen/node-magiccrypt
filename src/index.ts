@@ -16,9 +16,7 @@ export class MagicCrypt {
             case 256:
                 break;
             default:
-                throw new Error(
-                    "The key must be 8 bytes(64 bits), 16 bytes(128 bits), 24 bytes(192 bits) or 32 bytes(256 bits)!",
-                );
+                throw new Error("The bit must be 64, 128, 192 or 256!");
         }
 
         this.native = new NativeMagicCrypt(key, bit, iv);
@@ -28,15 +26,15 @@ export class MagicCrypt {
         return this.encryptData(Buffer.from(str, "utf8"));
     }
 
-    encryptData(dataBuffer: Buffer): string {
-        return this.native.encrypt(dataBuffer).toString("base64");
+    encryptData(data: Uint8Array): string {
+        return this.native.encrypt(data);
     }
 
-    decrypt(str: string): string {
-        return this.decryptData(str).toString("utf8");
+    decrypt(dataBase64: string): string {
+        return this.native.decryptToString(dataBase64);
     }
 
     decryptData(dataBase64: string): Buffer {
-        return this.native.decrypt(Buffer.from(dataBase64, "base64"));
+        return this.native.decrypt(dataBase64);
     }
 }

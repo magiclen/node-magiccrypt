@@ -80,3 +80,37 @@ describe("Unicode", () => {
         assert.equal(mc.decrypt(ciphertext), "繁體中文與 emoji 🌏");
     });
 });
+
+describe("Uint8Array input", () => {
+    it("accepts a plain Uint8Array, not only a Buffer", () => {
+        const mc = new MagicCrypt("magickey", 256);
+        const data = new TextEncoder().encode("http://magiclen.org");
+        assert.equal(mc.encryptData(data), "DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=");
+    });
+});
+
+describe("Errors", () => {
+    const ciphertext = "DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=";
+
+    it("rejects an unsupported bit", () => {
+        // The assertion is deliberate: this checks the runtime guard that protects JavaScript callers.
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+        const bit = 512 as unknown as Bit;
+
+        assert.throws(
+            () => new MagicCrypt("magickey", bit),
+            /The bit must be 64, 128, 192 or 256!/,
+        );
+    });
+
+    it("rejects a ciphertext encrypted with another key", () => {
+        const mc = new MagicCrypt("wrongkey", 256);
+        assert.throws(() => mc.decrypt(ciphertext), /failed to decrypt the data/);
+    });
+
+    it("rejects malformed Base64 instead of silently ignoring it", () => {
+        const mc = new MagicCrypt("magickey", 256);
+        assert.throws(() => mc.decrypt(`${ciphertext}ZZZZ`), /failed to decrypt the data/);
+        assert.throws(() => mc.decryptData("!!!!"), /failed to decrypt the data/);
+    });
+});

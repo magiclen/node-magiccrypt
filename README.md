@@ -38,13 +38,16 @@ The result is,
 
     DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=
 
-To encrypt any data buffer to a base64 string,
+To encrypt any data to a base64 string, pass a `Buffer` or a `Uint8Array`,
 
 ```typescript
+import { Buffer } from "node:buffer";
+
 import { MagicCrypt } from "magiccrypt";
 
 const mc = new MagicCrypt("magickey", 256);
-console.log(mc.encryptData(buffer));
+const data = Buffer.from("http://magiclen.org", "utf8");
+console.log(mc.encryptData(data));
 ```
 
 ### Decrypt
@@ -62,14 +65,33 @@ The result is,
 
     http://magiclen.org
 
-To decrypt any base64 string to data buffer,
+To decrypt a base64 string to a data buffer,
 
 ```typescript
 import { MagicCrypt } from "magiccrypt";
 
 const mc = new MagicCrypt("magickey", 256);
-const buffer = mc.decryptData(base64);
+const buffer = mc.decryptData("DS/2U8royDnJDiNY2ps3f6ZoTbpZo8ZtUGYLGEjwLDQ=");
 ```
+
+A base64 string that is not well-formed, or a ciphertext that was not produced by the same key and IV, throws an error.
+
+### Key Size and IV
+
+The second argument of the constructor is the key size in bits: `64` uses DES, while `128`, `192` and `256` use AES. It defaults to `128`. The key itself may be any length, as it is hashed to the size the cipher needs.
+
+The third argument is the initialization vector (IV). It is optional and defaults to an empty string, which means an all-zero IV.
+
+```typescript
+import { MagicCrypt } from "magiccrypt";
+
+const mc = new MagicCrypt("magickey", 256, "123456789");
+console.log(mc.encrypt("https://magiclen.org"));
+```
+
+The result is,
+
+    ixCZtfFVt01DgOX+WmsqERcd1efq/yVpGLc5SfTVYXc=
 
 ## For Java
 
