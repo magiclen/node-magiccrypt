@@ -1,6 +1,6 @@
 [package]
 name = "magiccrypt"
-version = "5.0.1"
+version = "6.0.0"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2024"
 rust-version = "1.89"
