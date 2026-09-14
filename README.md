@@ -5,7 +5,21 @@ MagicCrypt
 
 MagicCrypt is a Java/PHP/NodeJS/Rust library to encrypt/decrypt strings, files, or data, using Data Encryption Standard(DES) or Advanced Encryption Standard(AES) algorithms. It supports CBC block cipher mode, PKCS7 padding and 64, 128, 192 or 256-bits key length. If the encrypted data is a string, it will be formatted automatically to Base64.
 
-You need to set up the Rust development environment: [rustup](https://rustup.rs/)
+## Security Notice
+
+MagicCrypt uses an older encryption design and is not recommended for new projects.
+
+For new applications, please use a modern library that supports authenticated encryption. Authenticated encryption can protect encrypted data from both reading and unauthorized changes.
+
+## Requirements and Installation
+
+Node.js 24 or later and Rust 1.89 or later are required. Install Rust with [rustup](https://rustup.rs/) and the native linker for your platform (a C compiler on Linux/macOS or the MSVC build tools on Windows).
+
+```sh
+npm install magiccrypt
+```
+
+Installation compiles the native module from source using the included `Cargo.lock`. There are no prebuilt platform packages. Package managers that block dependency build scripts must allow the `magiccrypt` install script; for pnpm, approve `magiccrypt` with `pnpm approve-builds` and rebuild it with `pnpm rebuild magiccrypt`. If npm requires script approval, use `npm install-scripts approve magiccrypt` followed by `npm rebuild magiccrypt`.
 
 ## For Node.js
 

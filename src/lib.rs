@@ -1,55 +1,45 @@
-use crc_any::CRCu64;
-use digest::Digest;
-use md5::Md5;
-use napi::{bindgen_prelude::*, JsBuffer};
+use magic_crypt::{MagicCrypt, MagicCryptTrait, SecureBit};
+use napi::{
+    Error, Result, Status,
+    bindgen_prelude::{Buffer, BufferSlice},
+};
 use napi_derive::napi;
-use sha2::Sha256;
-use tiger::Tiger;
 
 #[napi]
-pub fn crc64we(env: Env, s: String) -> Result<JsBuffer> {
-    let mut crc = CRCu64::crc64we();
-    crc.digest(s.as_str());
-
-    let crc = crc.get_crc();
-
-    let buffer = env.create_buffer_with_data(crc.to_be_bytes().to_vec())?;
-
-    Ok(buffer.into_raw())
+pub struct NativeMagicCrypt {
+    inner: MagicCrypt,
 }
 
 #[napi]
-pub fn md5(env: Env, s: String) -> Result<JsBuffer> {
-    let mut md5 = Md5::default();
-    md5.update(s.as_str());
+impl NativeMagicCrypt {
+    #[napi(constructor)]
+    pub fn new(key: String, bit: u32, iv: String) -> Result<Self> {
+        let bit = match bit {
+            64 => SecureBit::Bit64,
+            128 => SecureBit::Bit128,
+            192 => SecureBit::Bit192,
+            256 => SecureBit::Bit256,
+            _ => return Err(Error::new(Status::InvalidArg, "Unsupported key size")),
+        };
 
-    let md5 = md5.finalize();
+        // An empty IV means zero bytes, not the hash of an empty string.
+        let iv = if iv.is_empty() { None } else { Some(iv) };
 
-    let buffer = env.create_buffer_with_data(md5.to_vec())?;
+        Ok(Self {
+            inner: MagicCrypt::new(key, bit, iv)
+        })
+    }
 
-    Ok(buffer.into_raw())
-}
+    #[napi]
+    pub fn encrypt(&self, data: BufferSlice<'_>) -> Buffer {
+        self.inner.encrypt_to_bytes(data.as_ref()).into()
+    }
 
-#[napi]
-pub fn tiger192(env: Env, s: String) -> Result<JsBuffer> {
-    let mut tiger = Tiger::default();
-    tiger.update(s.as_str());
-
-    let tiger = tiger.finalize();
-
-    let buffer = env.create_buffer_with_data(tiger.to_vec())?;
-
-    Ok(buffer.into_raw())
-}
-
-#[napi]
-pub fn sha256(env: Env, s: String) -> Result<JsBuffer> {
-    let mut sha256 = Sha256::default();
-    sha256.update(s.as_str());
-
-    let sha256 = sha256.finalize();
-
-    let buffer = env.create_buffer_with_data(sha256.to_vec())?;
-
-    Ok(buffer.into_raw())
+    #[napi]
+    pub fn decrypt(&self, data: BufferSlice<'_>) -> Result<Buffer> {
+        self.inner
+            .decrypt_bytes_to_bytes(data.as_ref())
+            .map(Buffer::from)
+            .map_err(|error| Error::new(Status::InvalidArg, error.to_string()))
+    }
 }

@@ -2,8 +2,8 @@
 name = "magiccrypt"
 version = "5.0.1"
 authors = ["Magic Len <len@magiclen.org>"]
-edition = "2021"
-rust-version = "1.65"
+edition = "2024"
+rust-version = "1.89"
 repository = "https://github.com/magiclen/node-magiccrypt"
 homepage = "https://magiclen.org/aes/"
 keywords = ["nodejs", "aes", "des", "encrypt", "decrypt"]
@@ -20,14 +20,9 @@ lto = true
 codegen-units = 1
 
 [dependencies]
-napi = "2"
-napi-derive = "2"
-
-crc-any = "2"
-digest = "0.10"
-md-5 = "0.10"
-tiger = "0.2"
-sha2 = "0.10"
+napi = "3.12.4"
+napi-derive = "3.6.5"
+magic-crypt = "5.0.1"
 
 [build-dependencies]
-napi-build = "2"
+napi-build = "2.4.2"
